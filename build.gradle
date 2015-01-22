@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'be.filipblondeel.gradle:gradle-gulp-plugin:0.1'
+    }
+}
+
+apply plugin: 'gulp'
+
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+task gulp(type: NodeTask) {
+    script = file('gulpfile.js')
+}
+
+task build {
+    npmInstall.execute()
+    installGulp.execute()
+    gulp_clean.execute()
+    gulp_default.execute()
+}
