@@ -1,0 +1,30 @@
+paths:
+  bower:
+    main: "./bower_components"
+    angular: "./bower_components/angular/angular.js"
+    angularRoute: "./bower_components/angular-route/angular-route.js"
+
+  coffee:
+    admin:
+      main: "./src/app/admin/*.coffee"
+      app: "./src/app/admin/app/*.coffee"
+    client:
+      main: "./src/app/client/*.coffee"
+      app: "./src/app/client/app/*.coffee"
+    shared:
+      main: "./src/app/shared/*.coffee"
+      app: "./src/app/shared/app/*.coffee"
+
+  templates:
+    index: "./src/app/index.html"
+    admin: "./src/app/admin/partials/**"
+    client: "./src/app/client/partials/**"
+
+  assets:
+    styles: "./src/assets/styles/**"
+
+  target:
+    main: "./target"
+    scripts:
+      admin: "admin-app.js"
+      client: "client-app.js"
