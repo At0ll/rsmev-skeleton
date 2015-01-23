@@ -1,6 +1,6 @@
 angular.module('rsmev.services', [])
   .factory 'sharedService', [() ->
-    get = () -> "Hello"
+    get = () -> "Hello "
     return {
       get: get
     }
