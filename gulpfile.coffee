@@ -29,8 +29,8 @@ gulp.task 'bower', ->
   gp.bower config.paths.bower.main
 
 gulp.task 'lib', ['bower'], ->
-  gulp.src [config.paths.bower.angular, config.paths.bower.angularRoute]
-  .pipe gp.concat 'lib.js'
+  gulp.src [config.paths.bower.angular, config.paths.bower.angularRoute, config.paths.bower.angularMocks]
+  .pipe gp.concat config.paths.target.scripts.lib
   .pipe gulp.dest config.paths.target.main
 	
 gulp.task 'deploy', ->
@@ -38,7 +38,7 @@ gulp.task 'deploy', ->
 		.pipe gulp.dest './target/'
 
 gulp.task 'admin-coffee', ->
-  gulp.src [config.paths.coffee.admin.main, config.paths.coffee.admin.app, config.paths.coffee.shared.main, config.paths.coffee.shared.app]
+  gulp.src [config.paths.coffee.shared.main, config.paths.coffee.shared.app, config.paths.coffee.admin.main, config.paths.coffee.admin.app]
     .pipe gp.plumber
       errorHandler: errorHandler
     .pipe gp.coffee
@@ -49,7 +49,7 @@ gulp.task 'admin-coffee', ->
     .pipe gulp.dest config.paths.target.main
 
 gulp.task 'client-coffee', ->
-  gulp.src [config.paths.coffee.client.main, config.paths.coffee.client.app, config.paths.coffee.shared.main, config.paths.coffee.shared.app]
+  gulp.src [config.paths.coffee.shared.main, config.paths.coffee.shared.app, config.paths.coffee.client.main, config.paths.coffee.client.app]
     .pipe gp.plumber
       errorHandler: errorHandler
     .pipe gp.coffee
@@ -67,14 +67,14 @@ gulp.task 'stylus', ->
     .pipe gulp.dest config.paths.target.main
   
 gulp.task 'test-admin', ->
-  gulp.src ['target/lib.js', 'target/admin-app.js', 'test/admin/*.spec.coffee']
+  gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.admin, config.paths.test.admin]
   .pipe gp.karma {
     configFile: 'karma.conf.js',
     action: 'run'
   }
 
 gulp.task 'test-client', ->
-  gulp.src ['target/lib.js', 'target/client-app.js', 'test/client/*.spec.coffee']
+  gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.client, config.paths.test.client]
   .pipe gp.karma {
     configFile: 'karma.conf.js',
     action: 'run'

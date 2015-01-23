@@ -3,6 +3,7 @@ paths:
     main: "./bower_components"
     angular: "./bower_components/angular/angular.js"
     angularRoute: "./bower_components/angular-route/angular-route.js"
+    angularMocks: "./bower_components/angular-mocks/angular-mocks.js"
 
   coffee:
     admin:
@@ -25,6 +26,15 @@ paths:
 
   target:
     main: "./target"
+    scriptsDest:
+      admin: "./target/admin-app.js"
+      client: "./target/client-app.js"
+      lib: "./target/lib.js"
     scripts:
       admin: "admin-app.js"
       client: "client-app.js"
+      lib: "lib.js"
+
+  test:
+    admin: './test/admin/*.spec.coffee'
+    client: './test/client/*.spec.coffee'
