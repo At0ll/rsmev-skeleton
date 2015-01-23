@@ -4,11 +4,6 @@ paths:
     angular: "./bower_components/angular/angular.js"
     angularRoute: "./bower_components/angular-route/angular-route.js"
 
-  src:
-    admin: "./src/app/admin"
-    client: "./src/app/client"
-    shared: "./src/app/shared"
-
   coffee:
     admin:
       main: "./src/app/admin/*.coffee"

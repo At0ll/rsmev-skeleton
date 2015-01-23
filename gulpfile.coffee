@@ -69,9 +69,10 @@ gulp.task 'stylus', ->
   Gulp watch tasks
 ###
 gulp.task 'watch', ->
-  gulp.watch './src/admin/', ['admin-coffee']
-  gulp.watch './src/client/', ['client-coffee']
-  gulp.watch './src/shared/', ['admin-coffee', 'client-coffee']
+  gulp.watch [config.paths.coffee.admin.main, config.paths.coffee.admin.app],  ['admin-coffee']
+  gulp.watch [config.paths.coffee.client.main, config.paths.coffee.client.app], ['client-coffee']
+  gulp.watch [config.paths.coffee.shared.main, config.paths.coffee.shared.app], ['admin-coffee', 'client-coffee']
+  gulp.watch config.paths.assets.styles, ['stylus']
 
 ###
 Gulp group tasks
