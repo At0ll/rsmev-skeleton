@@ -1,6 +1,7 @@
 {
   "name": "rsmev",
   "version": "0.0.1",
+  "main": "gulpfile.js",
   "dependencies": {
     "angular": "latest",
     "angular-route": "latest"

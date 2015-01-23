@@ -2,3 +2,10 @@ node_modules
 bower_components
 target
 *.log
+
+# Idea #
+*.iws
+*.ipr
+*.iml
+*.ids
+.idea/
