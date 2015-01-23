@@ -26,5 +26,7 @@ task build {
     npmInstall.execute()
     installGulp.execute()
     gulp_clean.execute()
+    gulp_lib.execute()
     gulp_default.execute()
+    gulp_test.execute()
 }

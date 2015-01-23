@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var clean = require('gulp-clean');
+var karma = require('gulp-karma');
 
 gulp.task('clean', function () {
     gulp.src('./target', {read: false})
@@ -13,7 +14,7 @@ gulp.task('deploy', function () {
 });
 
 gulp.task('lib', function () {
-    gulp.src(['./bower_components/angular/angular.js', './bower_components/angular-route/angular-route.js'])
+    gulp.src(['./bower_components/angular/angular.js', './bower_components/angular-route/angular-route.js', './bower_components/angular-mocks/angular-mocks.js'])
         .pipe(concat('lib.js'))
         .pipe(gulp.dest('./target/'));
 });
@@ -34,4 +35,21 @@ gulp.task('client-app', function () {
         .pipe(gulp.dest('./target/'));
 });
 
-gulp.task('default', ['deploy', 'admin-app', 'client-app']);
+gulp.task('test', function () {
+    // Be sure to return the stream
+    return gulp.src([
+        'target/lib.js',
+        'target/*.js',
+        'test/**/*.spec.js'
+    ])
+        .pipe(karma({
+            configFile: 'karma.conf.js',
+            action: 'run'
+        }))
+        .on('error', function (err) {
+            // Make sure failed tests cause gulp to exit non-zero
+//            throw err;
+        });
+});
+
+gulp.task('default', ['deploy', 'admin-app']);
