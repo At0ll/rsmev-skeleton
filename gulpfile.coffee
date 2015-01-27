@@ -68,7 +68,7 @@ gulp.task 'stylus', ->
   gulp.src config.paths.assets.styles
     .pipe gp.plumber
       errorHandler: errorHandler
-    .pipe gp.styl
+    .pipe gp.stylus
       whitespace: true
       compress: true
       use: [nib()]

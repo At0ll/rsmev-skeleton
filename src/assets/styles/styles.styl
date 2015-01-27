@@ -1,22 +1,24 @@
-fonts = helvetica, arial, sans-serif
+/*
+* styles.styl just as example
+*/
+@import 'variables'
 
 body
-  font: 14px fonts
-  background: linear-gradient(top, white, black)
+  font 14px $fonts
 
 h4, p
-  margin: 0
+  margin 0
 
 .admin_panel
-  background: #f2f2f2
-  border: 1px solid #c0c0c0
-  border-radius: 3px
-  width: 500px
-  margin: 10px 0
+  background $panel
+  border 1px solid #c0c0c0
+  border-radius 3px
+  width 500px
+  margin 10px 0
   h4
-    padding: 8px 16px
+    padding 8px 16px
     &:hover
-      color: #5e5e5e
-      cursor: pointer
+      color #5e5e5e
+      cursor pointer
   .content
-    background: #ffffff
+    background #ffffff

@@ -24,7 +24,7 @@ paths:
   assets:
     fonts: "./src/assets/fonts/**"
     images: "./src/assets/images/**"
-    styles: "./src/assets/styles/**"
+    styles: "./src/assets/styles/styles.styl"
 
   target:
     main: "./target"
