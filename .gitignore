@@ -9,3 +9,6 @@ target
 *.iml
 *.ids
 .idea/
+
+# Gradle #
+.gradle/
