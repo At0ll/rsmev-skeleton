@@ -1,5 +1,5 @@
-angular.module('rsmev.services').factory 'adminService',
-	[() ->
+angular.module('rsmev.services')
+.factory 'adminService', [() ->
 		get = () ->
 			"Admin"
 		return {

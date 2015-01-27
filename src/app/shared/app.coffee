@@ -1,1 +1,1 @@
-angular.module 'rsmev', ['ngRoute', 'rsmev.services', 'rsmev.controllers']
+angular.module 'rsmev', ['ngRoute', 'rsmev.controllers', 'rsmev.directives', 'rsmev.services']

@@ -1,6 +1,7 @@
 gulp = require 'gulp'
 fs = require 'fs'
 yaml = require 'js-yaml'
+nib = require 'nib'
 gp = {}
 
 Object.keys require('./package.json')['devDependencies']
@@ -22,7 +23,7 @@ errorHandler = (err) ->
   Gulp tasks
 ###
 gulp.task 'clean', ->
-	gulp.src config.paths.target.main, {read: false}
+	gulp.src config.paths.target.main, read: false
 		.pipe gp.clean()
 
 gulp.task 'bower', ->
@@ -30,12 +31,16 @@ gulp.task 'bower', ->
 
 gulp.task 'lib', ['bower'], ->
   gulp.src [config.paths.bower.angular, config.paths.bower.angularRoute, config.paths.bower.angularMocks]
-  .pipe gp.concat config.paths.target.scripts.lib
-  .pipe gulp.dest config.paths.target.main
+    .pipe gp.concat config.paths.target.scripts.lib
+    .pipe gulp.dest config.paths.target.main
 	
 gulp.task 'deploy', ->
-	gulp.src config.paths.templates.index
-		.pipe gulp.dest './target/'
+  gulp.src config.paths.assets.fonts
+    .pipe gulp.dest config.paths.target.assets.fonts
+  gulp.src config.paths.assets.images
+    .pipe gulp.dest config.paths.target.assets.images.dest
+  gulp.src config.paths.templates.index
+    .pipe gulp.dest config.paths.target.main
 
 gulp.task 'admin-coffee', ->
   gulp.src [config.paths.coffee.shared.main, config.paths.coffee.shared.app, config.paths.coffee.admin.main, config.paths.coffee.admin.app]
@@ -63,23 +68,63 @@ gulp.task 'stylus', ->
   gulp.src config.paths.assets.styles
     .pipe gp.plumber
       errorHandler: errorHandler
-    .pipe gp.styl()
+    .pipe gp.styl
+      whitespace: true
+      compress: true
+      use: [nib()]
+      import: 'nib'
     .pipe gulp.dest config.paths.target.main
+
+gulp.task 'templates-admin', ->
+  gulp.src [config.paths.templates.index, config.paths.templates.admin]
+    .pipe gp.plumber
+      errorHandler: errorHandler
+    .pipe gp.angular_templatecache filename: config.paths.target.scripts.templates.admin
+    .pipe gulp.dest config.paths.target.main
+
+gulp.task 'templates-client', ->
+  gulp.src [config.paths.templates.index, config.paths.templates.client]
+  .pipe gp.plumber
+    errorHandler: errorHandler
+  .pipe gp.angular_templatecache filename: config.paths.target.scripts.templates.client
+  .pipe gulp.dest config.paths.target.main
   
 gulp.task 'test-admin', ->
   gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.admin, config.paths.test.admin]
-  .pipe gp.karma {
+  .pipe gp.karma
     configFile: 'karma.conf.js',
     action: 'run'
-  }
 
 gulp.task 'test-client', ->
   gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.client, config.paths.test.client]
-  .pipe gp.karma {
+  .pipe gp.karma
     configFile: 'karma.conf.js',
     action: 'run'
-  }
 
+###
+  Optimization tasks
+###
+gulp.task 'jshint', ['admin-coffee', 'client-coffee', 'templates-admin', 'templates-client'], ->
+  gulp.src [config.paths.target.scriptsDest.admin, config.paths.target.scriptsDest.client, config.paths.target.scriptsDest.templates.admin, config.paths.target.scriptsDest.templates.client]
+    .pipe gp.jshint()
+    .pipe gp.jshint.reporter 'default'
+
+gulp.task 'scripts-min', ->
+  gulp.src config.paths.target.scriptsDest.all
+    .pipe gp.plumber
+      errorHandler: errorHandler
+    .pipe gp.uglify()
+    .pipe gulp.dest config.paths.target.main
+
+gulp.task 'image-min', ->
+  gulp.src config.paths.target.assets.images.all
+    .pipe gp.plumber
+      errorHandler: errorHandler
+    .pipe gp.imagemin
+      progressive: true
+      svgoPlugins: [removeViewBox: false]
+      #use: {} @todo: add necessary plugin
+    .pipe gulp.dest config.paths.target.assets.images.dest
 ###
   Gulp watch tasks
 ###
@@ -94,5 +139,9 @@ Gulp group tasks
 ###
 gulp.task 'build', ['clean', 'bower', 'lib']
 gulp.task 'test', ['test-admin', 'test-client']
-gulp.task 'default', ['deploy', 'admin-coffee', 'client-coffee', 'stylus']
+gulp.task 'default', ['deploy', 'admin-coffee', 'client-coffee', 'stylus', 'templates-admin', 'templates-client']
+gulp.task 'minify', ['scripts-min', 'image-min']
+gulp.task 'dev', ['default', 'watch']
+gulp.task 'prod', ['default'], ->
+  gulp.start 'minify'
 	 

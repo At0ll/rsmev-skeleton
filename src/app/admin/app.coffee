@@ -1,4 +1,5 @@
-angular.module('rsmev').config(($routeProvider) ->
+angular.module('rsmev', ['ngRoute', 'rsmev.controllers', 'rsmev.services', 'rsmev.directives', 'rsmev.widgets'])
+.config(($routeProvider) ->
 	$routeProvider
 	 .when '/admin',
 	  templateUrl: 'pages/admin.html',

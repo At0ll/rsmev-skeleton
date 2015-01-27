@@ -22,18 +22,34 @@ paths:
     client: "./src/app/client/partials/**"
 
   assets:
+    fonts: "./src/assets/fonts/**"
+    images: "./src/assets/images/**"
     styles: "./src/assets/styles/**"
 
   target:
     main: "./target"
     scriptsDest:
+      all: "./target/*.js"
       admin: "./target/admin-app.js"
       client: "./target/client-app.js"
       lib: "./target/lib.js"
+      templates:
+        admin: "./target/admin-templates.js"
+        client: "./target/client-templates.js"
     scripts:
       admin: "admin-app.js"
       client: "client-app.js"
       lib: "lib.js"
+      templates:
+        admin: "admin-templates.js"
+        client: "client-templates.js"
+    indexDest: "./target/index.html"
+    assets:
+      fonts: "./target/fonts"
+      images:
+        all: "./target/images/*.*"
+        dest: "./target/images"
+      styles: "./target/styles.css"
 
   test:
     admin: './test/admin/*.spec.coffee'
