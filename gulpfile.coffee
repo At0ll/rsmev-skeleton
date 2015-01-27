@@ -2,6 +2,7 @@ gulp = require 'gulp'
 fs = require 'fs'
 yaml = require 'js-yaml'
 nib = require 'nib'
+pngquant = require 'imagemin-pngquant'
 gp = {}
 
 Object.keys require('./package.json')['devDependencies']
@@ -123,7 +124,7 @@ gulp.task 'image-min', ->
     .pipe gp.imagemin
       progressive: true
       svgoPlugins: [removeViewBox: false]
-      #use: {} @todo: add necessary plugin
+      use: [pngquant()]
     .pipe gulp.dest config.paths.target.assets.images.dest
 ###
   Gulp watch tasks
@@ -141,6 +142,7 @@ gulp.task 'build', ['clean', 'bower', 'lib']
 gulp.task 'test', ['test-admin', 'test-client']
 gulp.task 'default', ['deploy', 'admin-coffee', 'client-coffee', 'stylus', 'templates-admin', 'templates-client']
 gulp.task 'minify', ['scripts-min', 'image-min']
+
 gulp.task 'dev', ['default', 'watch']
 gulp.task 'prod', ['default'], ->
   gulp.start 'minify'
