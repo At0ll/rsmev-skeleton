@@ -35,12 +35,20 @@ gulp.task 'lib', ['bower'], ->
     .pipe gp.concat config.paths.target.scripts.lib
     .pipe gulp.dest config.paths.target.main
 	
-gulp.task 'deploy', ->
+gulp.task 'assets', ->
   gulp.src config.paths.assets.fonts
     .pipe gulp.dest config.paths.target.assets.fonts
   gulp.src config.paths.assets.images
     .pipe gulp.dest config.paths.target.assets.images.dest
-  gulp.src config.paths.templates.index
+
+gulp.task 'deploy', ->
+  target = gulp.src config.paths.templates.index
+  sources = gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.admin, config.paths.target.scriptsDest.templates.admin, config.paths.target.assets.styles],
+    read: false
+  target
+    .pipe gp.plumber
+      errorHandler: errorHandler
+    .pipe gp.inject(sources, name: 'app', ignorePath: "/target/", addRootSlash: false)
     .pipe gulp.dest config.paths.target.main
 
 gulp.task 'admin-coffee', ->
@@ -93,13 +101,13 @@ gulp.task 'templates-client', ->
 gulp.task 'test-admin', ->
   gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.admin, config.paths.test.admin]
   .pipe gp.karma
-    configFile: 'karma.conf.js',
+    configFile: config.paths.karma.file,
     action: 'run'
 
 gulp.task 'test-client', ->
   gulp.src [config.paths.target.scriptsDest.lib, config.paths.target.scriptsDest.client, config.paths.test.client]
   .pipe gp.karma
-    configFile: 'karma.conf.js',
+    configFile: config.paths.karma.file,
     action: 'run'
 
 ###
@@ -126,6 +134,7 @@ gulp.task 'image-min', ->
       svgoPlugins: [removeViewBox: false]
       use: [pngquant()]
     .pipe gulp.dest config.paths.target.assets.images.dest
+
 ###
   Gulp watch tasks
 ###
@@ -140,10 +149,13 @@ Gulp group tasks
 ###
 gulp.task 'build', ['clean', 'bower', 'lib']
 gulp.task 'test', ['test-admin', 'test-client']
-gulp.task 'default', ['deploy', 'admin-coffee', 'client-coffee', 'stylus', 'templates-admin', 'templates-client']
 gulp.task 'minify', ['scripts-min', 'image-min']
 
+gulp.task 'default', ['assets', 'admin-coffee', 'client-coffee', 'stylus', 'templates-admin', 'templates-client'], ->
+  gulp.start 'deploy'
+
 gulp.task 'dev', ['default', 'watch']
+
 gulp.task 'prod', ['default'], ->
   gulp.start 'minify'
 	 

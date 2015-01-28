@@ -54,3 +54,6 @@ paths:
   test:
     admin: './test/admin/*.spec.coffee'
     client: './test/client/*.spec.coffee'
+
+  karma:
+    file: "karma.conf.js"
